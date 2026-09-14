@@ -6,8 +6,16 @@ Built as a **Yarn monorepo** for the Octa Byte AI Full Stack Intern case study.
 
 ---
 
+## 🚀 Live Demo & Walkthrough
+
+- 🌐 **Live Application:** [8-ai-web.vercel.app/dashboard](https://8-ai-web.vercel.app/dashboard)
+- 📹 **Video Walkthrough (Loom):** [Watch Demo on Loom](https://www.loom.com/share/c824c051aa7645769d4b6ee161410b0a)
+
+---
+
 ## Table of Contents
 
+- [Live Demo & Walkthrough](#-live-demo--walkthrough)
 - [Overview](#overview)
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
