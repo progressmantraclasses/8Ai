@@ -1,0 +1,20 @@
+{
+  "name": "portfolio-dashboard",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "yarn workspace @portfolio/web dev",
+    "build": "yarn workspace @portfolio/web build",
+    "start": "yarn workspace @portfolio/web start",
+    "lint": "yarn workspace @portfolio/web lint",
+    "test": "yarn workspace @portfolio/web test",
+    "clean": "rimraf node_modules apps/*/node_modules packages/*/node_modules"
+  },
+  "packageManager": "yarn@1.22.22",
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

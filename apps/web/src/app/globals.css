@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global styles and design system for the Portfolio Dashboard */
+
+@layer base {
+  /* Smooth font rendering for the dark theme */
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-surface-900 text-white;
+    background-image:
+      radial-gradient(ellipse at 0% 0%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 100% 100%, rgba(34, 197, 94, 0.03) 0%, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  /* Custom scrollbar for the dark theme */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+@layer components {
+  /* Glassmorphism card effect — used on summary cards and containers */
+  .glass-card {
+    @apply bg-surface-900/60 backdrop-blur-sm border border-white/10 rounded-xl;
+  }
+
+  /* Table row hover effect */
+  .table-row-hover {
+    @apply hover:bg-white/[0.03] transition-colors duration-150;
+  }
+}
+
+@layer utilities {
+  /* Text gradient utility for headings */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-light to-accent;
+  }
+
+  /* Glow effect for important values */
+  .glow-gain {
+    text-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
+  }
+
+  .glow-loss {
+    text-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+  }
+}
