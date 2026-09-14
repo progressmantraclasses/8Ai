@@ -57,23 +57,27 @@ export default function PortfolioInsights({ sectors }: PortfolioInsightsProps) {
 
   const { topGainer, topLoser, bestSector } = insights;
 
+  const gainer = topGainer as StockWithMetrics | null;
+  const loser = topLoser as StockWithMetrics | null;
+  const best = bestSector as SectorSummary | null;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
       <div className="rounded-xl border border-white/10 bg-surface-900/60 backdrop-blur-sm p-5 border-l-4 border-l-gain/50">
         <p className="text-xs font-medium text-surface-200/50 uppercase tracking-wider mb-2">
           Top Gainer
         </p>
-        {topGainer && topGainer.derived?.gainLossPercent !== null && topGainer.derived?.gainLossPercent !== undefined ? (
+        {gainer && gainer.derived?.gainLossPercent != null ? (
           <div>
             <p className="text-lg font-bold text-white truncate">
-              {topGainer.particulars}
+              {gainer.particulars}
             </p>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-gain font-mono font-bold">
-                {formatPercent(topGainer.derived.gainLossPercent)}
+                {formatPercent(gainer.derived.gainLossPercent)}
               </span>
               <span className="text-xs text-surface-200/50 font-mono">
-                ({formatCurrency(topGainer.derived.gainLoss)})
+                ({formatCurrency(gainer.derived.gainLoss)})
               </span>
             </div>
           </div>
@@ -86,17 +90,17 @@ export default function PortfolioInsights({ sectors }: PortfolioInsightsProps) {
         <p className="text-xs font-medium text-surface-200/50 uppercase tracking-wider mb-2">
           Top Loser
         </p>
-        {topLoser && topLoser.derived?.gainLossPercent !== null && topLoser.derived?.gainLossPercent !== undefined ? (
+        {loser && loser.derived?.gainLossPercent != null ? (
           <div>
             <p className="text-lg font-bold text-white truncate">
-              {topLoser.particulars}
+              {loser.particulars}
             </p>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-loss font-mono font-bold">
-                {formatPercent(topLoser.derived.gainLossPercent)}
+                {formatPercent(loser.derived.gainLossPercent)}
               </span>
               <span className="text-xs text-surface-200/50 font-mono">
-                ({formatCurrency(topLoser.derived.gainLoss)})
+                ({formatCurrency(loser.derived.gainLoss)})
               </span>
             </div>
           </div>
@@ -109,14 +113,14 @@ export default function PortfolioInsights({ sectors }: PortfolioInsightsProps) {
         <p className="text-xs font-medium text-surface-200/50 uppercase tracking-wider mb-2">
           Best Performing Sector
         </p>
-        {bestSector && bestSector.totalGainLossPercent !== null && bestSector.totalGainLossPercent !== undefined ? (
+        {best && best.totalGainLossPercent != null ? (
           <div>
             <p className="text-lg font-bold text-white truncate">
-              {bestSector.sector}
+              {best.sector}
             </p>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-accent-light font-mono font-bold">
-                {formatPercent(bestSector.totalGainLossPercent)}
+                {formatPercent(best.totalGainLossPercent)}
               </span>
             </div>
           </div>

@@ -1,12 +1,12 @@
 // PortfolioTable rendered using @tanstack/react-table with built-in sector grouping
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import {
-  useTable,
-  createCoreRowModel,
-  createGroupedRowModel,
-  createExpandedRowModel,
+  useReactTable,
+  getCoreRowModel,
+  getGroupedRowModel,
+  getExpandedRowModel,
   flexRender,
   createColumnHelper,
 } from "@tanstack/react-table";
@@ -47,19 +47,19 @@ export default function PortfolioTable({
       columnHelper.display({
         id: "index",
         header: "#",
-        cell: (info) => (info.row.getIsGrouped?.() ? "" : info.row.index + 1),
+        cell: (info) => (info.row.getIsGrouped() ? "" : info.row.index + 1),
       }),
       columnHelper.accessor("particulars", {
         header: "Particulars",
         cell: (info) => {
-          if (info.row.getIsGrouped?.()) {
+          if (info.row.getIsGrouped()) {
             return (
               <button
                 className="flex items-center gap-2 font-bold text-white text-sm"
-                onClick={info.row.getToggleExpandedHandler?.()}
+                onClick={info.row.getToggleExpandedHandler()}
               >
                 <span className="text-accent">
-                  {info.row.getIsExpanded?.() ? "▼" : "▶"}
+                  {info.row.getIsExpanded() ? "▼" : "▶"}
                 </span>
                 {info.row.getValue("sector")} ({info.row.subRows.length})
               </button>
@@ -68,7 +68,7 @@ export default function PortfolioTable({
           return (
             <div className="flex flex-col">
               <span className="font-medium text-white">{info.getValue()}</span>
-              {info.row.original.fetchStatus === "error" && (
+              {(info.row.original as StockWithMetrics & { fetchStatus?: string }).fetchStatus === "error" && (
                 <span className="text-[10px] text-loss">Fetch Failed</span>
               )}
             </div>
@@ -78,11 +78,11 @@ export default function PortfolioTable({
       columnHelper.accessor("purchasePrice", {
         header: "Purchase Price",
         cell: (info) =>
-          info.row.getIsGrouped?.() ? "" : formatCurrency(info.getValue()),
+          info.row.getIsGrouped() ? "" : formatCurrency(info.getValue()),
       }),
       columnHelper.accessor("quantity", {
         header: "Qty",
-        cell: (info) => (info.row.getIsGrouped?.() ? "" : info.getValue()),
+        cell: (info) => (info.row.getIsGrouped() ? "" : info.getValue()),
       }),
       columnHelper.accessor("derived.investment", {
         header: "Investment",
@@ -105,7 +105,7 @@ export default function PortfolioTable({
       columnHelper.accessor("exchangeCode", {
         header: "NSE/BSE",
         cell: (info) =>
-          info.row.getIsGrouped?.() ? (
+          info.row.getIsGrouped() ? (
             ""
           ) : (
             <div className="flex flex-col items-center">
@@ -119,7 +119,7 @@ export default function PortfolioTable({
       columnHelper.accessor("cmp", {
         header: "CMP",
         cell: (info) => {
-          if (info.row.getIsGrouped?.()) return "";
+          if (info.row.getIsGrouped()) return "";
           const val = info.getValue();
           return val !== null ? (
             <span className="font-mono">{formatCurrency(val)}</span>
@@ -147,15 +147,15 @@ export default function PortfolioTable({
         aggregationFn: "sum",
         cell: (info) => {
           const val = info.getValue() as number | null;
-          
-          if (info.row.getIsGrouped?.()) {
-             const investment = info.row.getValue("derived_investment") as number;
-             const presentValue = info.row.getValue("derived_presentValue") as number | null;
-             let percent = null;
-             if (presentValue !== null && investment > 0) {
-                 percent = (presentValue - investment) / investment;
-             }
-             return <GainLossCell value={val} showBoth={true} percentValue={percent} />;
+
+          if (info.row.getIsGrouped()) {
+            const investment = info.row.getValue("derived_investment") as number;
+            const presentValue = info.row.getValue("derived_presentValue") as number | null;
+            let percent = null;
+            if (presentValue !== null && investment > 0) {
+              percent = (presentValue - investment) / investment;
+            }
+            return <GainLossCell value={val} showBoth={true} percentValue={percent} />;
           }
 
           return (
@@ -170,7 +170,7 @@ export default function PortfolioTable({
       columnHelper.accessor("peRatioTTM", {
         header: "P/E (TTM)",
         cell: (info) => {
-          if (info.row.getIsGrouped?.()) return "";
+          if (info.row.getIsGrouped()) return "";
           const val = info.getValue();
           return val !== null ? (
             <span className="font-mono">{val.toFixed(2)}</span>
@@ -182,7 +182,7 @@ export default function PortfolioTable({
       columnHelper.accessor("latestEarnings", {
         header: "Earnings",
         cell: (info) => {
-          if (info.row.getIsGrouped?.()) return "";
+          if (info.row.getIsGrouped()) return "";
           const val = info.getValue();
           return val !== null ? (
             <span className="font-mono">{formatCurrency(val)}</span>
@@ -195,7 +195,7 @@ export default function PortfolioTable({
     []
   );
 
-  const table = useTable({
+  const table = useReactTable({
     data,
     columns,
     state: {
@@ -203,11 +203,11 @@ export default function PortfolioTable({
       expanded: true,
     },
     initialState: {
-      expanded: true, 
+      expanded: true,
     },
-    getCoreRowModel: createCoreRowModel(),
-    getGroupedRowModel: createGroupedRowModel(),
-    getExpandedRowModel: createExpandedRowModel(),
+    getCoreRowModel: getCoreRowModel(),
+    getGroupedRowModel: getGroupedRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
   });
 
   return (
@@ -239,7 +239,7 @@ export default function PortfolioTable({
 
         <tbody>
           {table.getRowModel().rows.map((row) => {
-            const isGroup = row.getIsGrouped?.() ?? false;
+            const isGroup = row.getIsGrouped();
             return (
               <tr
                 key={row.id}

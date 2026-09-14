@@ -59,7 +59,7 @@ export async function GET(): Promise<NextResponse> {
   try {
     // 1. Load static holdings
     const holdingsModule = await import("../../../../data/holdings.json");
-    const holdings: HoldingEntry[] = holdingsModule.default;
+    const holdings: HoldingEntry[] = holdingsModule.default as HoldingEntry[];
 
     // 2. Fetch live CMP (with caching)
     let quotes = apiCache.get<Map<string, QuoteData>>(QUOTES_CACHE_KEY);
